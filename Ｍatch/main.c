@@ -139,7 +139,7 @@ void display(h){
 }
 
 int disinput(){
-    int m;
+    int m,h=0;
     printf("|  -----------------------------  |\n");
     printf("|           回到主菜单？❤️          |\n");
     printf("|  -----------------------------  |\n");
@@ -148,7 +148,8 @@ int disinput(){
     printf("|  -----------------------------  |\n");
     scanf("%d",&m);
     if(m==1){
-        menu();
+        h=menu();
+        display(h);
     }
     else if(m==0){
         return 0;
