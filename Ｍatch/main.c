@@ -45,8 +45,8 @@ int menu(){//菜单栏
     printf("|              ✨2----录入裁判信息         |\n");
     printf("|              ✨3----录入得分            |\n");
     printf("|              ✨4----节目排名            |\n");
-    printf("|              ✨5----选手信息            |\n");
-    printf("|              ✨6----裁判信息            |\n");
+    //printf("|              ✨5----选手信息            |\n");
+    printf("|              ✨5----裁判信息            |\n");
     printf("|              ✨0----退出系统            |\n");
     printf("|  ------------------------------------  |\n");
     printf("输入数字以进行操作：\n");
@@ -171,17 +171,14 @@ void input(SeqlistS *L,int n){
 void shows(SeqlistS *L){
     int i,j;
     j=L->last;
-    if(j==-1){
-        printf("      ---------没有可以显示的信息!\n");
-        }
-    
-    else{
-       
+    if(j>=0){
         printf("| 姓名 | 性别 | 节目名称 | 节目类别 | 班级 | 电话号码 |\n");
         for(i=0;i<=L->last;i++){
             printf("|   %s   |   %c   |   %s   |   %s   |   %s   |   %s   |\n",L->elem[i].name,L->elem[i].sex,L->elem[i].proname,L->elem[i].prochoo,L->elem[i].classname,L->elem[i].phonenum);
         }
-
+    }
+    else{
+        printf("      ---------没有可以显示的信息!\n");
     }
     
 }
@@ -238,11 +235,10 @@ void display(h){
             sort(&ls);
             shows(&ls);
             break;
-  
-        case 5://显示选手信息
-            shows(&ls);
-            break;
-        case 6://显示裁判信息
+        //case 5://显示选手信息
+            //shows(&ls);
+           // break;
+        case 5://显示裁判信息
             showt(&lt);
             break;
         case 0://退出系统✅
