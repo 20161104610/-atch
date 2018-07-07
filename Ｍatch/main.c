@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+int tnum;
+
 struct Student {
     char name[10];//姓名
     char sex;//性别
@@ -43,9 +45,8 @@ int menu(){//菜单栏
     printf("|              ✨2----录入裁判信息         |\n");
     printf("|              ✨3----录入得分            |\n");
     printf("|              ✨4----节目排名            |\n");
-    printf("|              ✨5----保存信息            |\n");
-    printf("|              ✨6----选手信息            |\n");
-    printf("|              ✨7----裁判信息            |\n");
+    printf("|              ✨5----选手信息            |\n");
+    printf("|              ✨6----裁判信息            |\n");
     printf("|              ✨0----退出系统            |\n");
     printf("|  ------------------------------------  |\n");
     printf("输入数字以进行操作：\n");
@@ -53,12 +54,12 @@ int menu(){//菜单栏
     return m;
 }
 
-void save(SeqlistT *L){//保存
+void save(SeqlistT *L,int n){//保存
     FILE *fw;
     int i;
     fw=fopen("//Users//h20161104610//Desktop//teachers.csv","w");
-    for(i=0;i<5;i++){
-        fprintf(fw,"%s %c %d",L->elem[i].name,L->elem[i].sex,L->elem[i].phonenum);
+    for(i=0;i<n;i++){
+        fprintf(fw,"%s %c %s\n",L->elem[i].name,L->elem[i].sex,L->elem[i].phonenum);
     }
     fclose(fw);
 }
@@ -102,38 +103,31 @@ void teachers(SeqlistT *L){//录入裁判信息
     FILE *fw=fopen("//User//h20161104610//Desktop//teachers.csv", "w");
     printf("请输入裁判数量:\n");
     scanf("%d",&n);
+    tnum=n;
     for(i=0;i<n;i++){
         printf("请输入第%d个裁判的姓名：\n",i+1);
         scanf("%s",&L->elem[i].name);
-        //fprintf(fw,"%s",&L->elem[i].name);
         printf("请输入第%d个裁判的性别：\n",i+1);
         scanf("%s",&L->elem[i].sex);
-        //fprintf(fw,"%s",L->elem[i].sex);
         printf("请输入第%d个裁判的电话号码：\n",i+1);
         scanf("%s",&L->elem[i].phonenum);
-        //fprintf(fw,"%d",L->elem[i].phonenum);
     }
     fclose(fw);
+    save(L,n);
 }
 
-void input(SeqlistS *L){
+void input(SeqlistS *L,int n){
     int i,j,k,h,z=0;
     float fs=0;
     for(i=0;i<30;i++){
         printf("请输入给第%d小组的评分:\n",i+1);
-        printf("第1位评委评分:\n");
-        scanf("%d",&L->elem[i].sorce[0]);
-        printf("第2位评委评分:\n");
-        scanf("%d",&L->elem[i].sorce[1]);
-        printf("第3位评委评分:\n");
-        scanf("%d",&L->elem[i].sorce[2]);
-        printf("第4位评委评分:\n");
-        scanf("%d",&L->elem[i].sorce[3]);
-        printf("第5位评委评分:\n");
-        scanf("%d",&L->elem[i].sorce[4]);
+        for(k=0;k<n;k++){
+            printf("第%d位评委评分:\n",k+1);
+            scanf("%d",&L->elem[i].sorce[k]);
+        }
         
-        for(k=0;k<5;k++){
-            for(h=0;h<5-k;k++){
+        for(k=0;k<n;k++){
+            for(h=0;h<n-k;k++){
                 if(L->elem[i].sorce[k]>=L->elem[i].sorce[k+1]){
                     z=L->elem[i].sorce[k];
                     L->elem[i].sorce[k]=L->elem[i].sorce[k+1];
@@ -142,13 +136,24 @@ void input(SeqlistS *L){
             }
             
         }
-        for(k=1;k<4;k++){
-            fs=fs+L->elem[i].sorce[k];
+        if(n>2){
+            for(k=1;k<n-1;k++){
+                fs=fs+L->elem[i].sorce[k];
+            }
+            fs=fs/(n-2);
+            L->elem[i].fasorce=fs;
+            printf("第%d小组的最终得分为:\n",i+1);
+            printf("%.2f\n",fs);
         }
-        fs=fs/3;
-        L->elem[i].fasorce=fs/3;
-        printf("第%d小组的最终得分为:\n",i+1);
-        printf("%.2f\n",fs);
+        else{
+            for(k=0;k<n;k++){
+                fs=fs+L->elem[i].sorce[k];
+            }
+            fs=fs/n;
+            L->elem[i].fasorce=fs;
+            printf("第%d小组的最终得分为:\n",i+1);
+            printf("%.2f\n",fs);
+        }
         
         printf("|  ------------------------------------  |\n");
         printf("|              是否继续进行评分❤️           |\n");
@@ -167,7 +172,7 @@ void input(SeqlistS *L){
 void shows(SeqlistS *L){
     int i,j;
     j=L->last;
-    if(j==NULL){
+    if(j==-1){
         printf("      ---------没有可以显示的信息!\n");
         }
     
@@ -226,23 +231,20 @@ void display(h){
             break;
         case 2://裁判信息 开始录入✅
             teachers(&lt);
-            save(&lt);
-            showt(&lt);
+            //showt(&lt);
             break;
         case 3://录入得分并计算最终得分✅
-            input(&ls);
+            input(&ls,tnum);
             break;
         case 4://排序 节目得分排序
             sort(&ls);
             shows(&ls);
             break;
-        case 5://保存
-            save(&ls);
-            break;
-        case 6://显示选手信息
+  
+        case 5://显示选手信息
             shows(&ls);
             break;
-        case 7://显示裁判信息
+        case 6://显示裁判信息
             showt(&lt);
             break;
         case 0://退出系统✅
