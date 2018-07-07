@@ -92,7 +92,6 @@ void loads(SeqlistS *L){//读取数据
             L->last++;
         }
         printf("文件读取成功!\n");
-        printf("%s %c %s %s %s %s\n",name,sex,pname,pchoo,cname,pnum);
         fclose(fr);
     }
 }
@@ -180,7 +179,7 @@ void shows(SeqlistS *L){
        
         printf("| 姓名 | 性别 | 节目名称 | 节目类别 | 班级 | 电话号码 |\n");
         for(i=0;i<=L->last;i++){
-            printf("|  %s  |  %c  |  %s  |  %s  |  %s  |  %s  |\n",L->elem[i].name,L->elem[i].sex,L->elem[i].proname,L->elem[i].prochoo,L->elem[i].classname,L->elem[i].phonenum);
+            printf("|   %s   |   %c   |   %s   |   %s   |   %s   |   %s   |\n",L->elem[i].name,L->elem[i].sex,L->elem[i].proname,L->elem[i].prochoo,L->elem[i].classname,L->elem[i].phonenum);
         }
 
     }
@@ -225,13 +224,12 @@ void display(h){
     ls.last=-1;
     lt.last=-1;
     switch(h){
-        case 1://节目信息 从文件中读取
+        case 1://节目信息 从文件中读取✅
             loads(&ls);
             shows(&ls);
             break;
         case 2://裁判信息 开始录入✅
             teachers(&lt);
-            //showt(&lt);
             break;
         case 3://录入得分并计算最终得分✅
             input(&ls,tnum);
